@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="28" viewBox="0 0 64 28">
+  <!-- 《七雄策》城墙贴图：可横向平铺，用于分隔远程行与守军行 -->
+  <rect width="64" height="28" fill="#2a231d"/>
+  <g fill="#3a3129">
+    <rect x="0" y="0" width="10" height="7"/>
+    <rect x="13" y="0" width="10" height="7"/>
+    <rect x="26" y="0" width="10" height="7"/>
+    <rect x="39" y="0" width="10" height="7"/>
+    <rect x="52" y="0" width="10" height="7"/>
+  </g>
+  <g fill="#463b30">
+    <rect x="0" y="9" width="14" height="8"/>
+    <rect x="16" y="9" width="14" height="8"/>
+    <rect x="32" y="9" width="14" height="8"/>
+    <rect x="48" y="9" width="14" height="8"/>
+  </g>
+  <g fill="#38302a">
+    <rect x="0" y="19" width="18" height="8"/>
+    <rect x="20" y="19" width="18" height="8"/>
+    <rect x="40" y="19" width="18" height="8"/>
+  </g>
+  <g fill="#1c1713" opacity="0.6">
+    <rect x="0" y="0" width="64" height="1"/>
+    <rect x="0" y="8" width="64" height="1"/>
+    <rect x="0" y="18" width="64" height="1"/>
+    <rect x="0" y="27" width="64" height="1"/>
+  </g>
+</svg>

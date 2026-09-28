@@ -1,0 +1,21 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# 导出的游戏本体
+导出/
+*.pck
+*.exe
+
+# WorkBuddy 工作区（含会话记录，不入库）
+.workbuddy/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器
+.vscode/
+.idea/
+*.tmp
