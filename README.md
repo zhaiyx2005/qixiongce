@@ -2,6 +2,17 @@
 
 战国题材单人卡牌对战 Demo，基于 Godot 4.7 + GDScript 开发。
 
+## 下载即玩（免安装）
+
+不想配环境？直接下载打包好的 Windows 免安装版：
+
+- **GitHub Releases**：https://github.com/zhaiyx2005/qixiongce/releases/latest （约 38 MB）
+
+解压后双击 `七雄策.exe` 即可开始游戏，**请保持 `七雄策.pck` 与 exe 在同一目录**。
+若被 Windows SmartScreen 拦截，右键 exe → 属性 → 勾选「解除锁定」后重试。
+
+> 需要从源码运行或自行导出，见下方「开发环境」。
+
 ## 玩法
 
 三局两胜制。每回合通过出牌与 Pass 进行**三行战力比拼**，先赢下两行者获胜。
