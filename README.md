@@ -6,6 +6,7 @@
 
 不想配环境？直接下载打包好的 Windows 免安装版：
 
+- **Gitee Releases（国内推荐，秒开）**：https://gitee.com/zhaiyx2005/qixiongce/releases/tag/v1.0 （约 38 MB）
 - **GitHub Releases**：https://github.com/zhaiyx2005/qixiongce/releases/latest （约 38 MB）
 
 解压后双击 `七雄策.exe` 即可开始游戏，**请保持 `七雄策.pck` 与 exe 在同一目录**。
