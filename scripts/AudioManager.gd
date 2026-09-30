@@ -13,7 +13,7 @@ extends Node
 ## 内部转成分贝：`db = linear_to_db(v)`。线性值更符合玩家直觉（滑块拉一半 ≈ 听感一半音量）。
 ## 全部静音时直接把总线 mute 掉，避免 linear_to_db(0) = -inf 参与运算。
 ##
-## 【素材为本项目自行合成】`assets/music/`（2 首 BGM）与 `assets/sfx/`（12 个音效）
+## 【素材为本项目自行合成】`assets/music/`（3 首 BGM）与 `assets/sfx/`（15 个音效）
 ## 全部由程序合成 —— 四种音色：编钟（金属非谐泛音）、古筝（拨弦谐波衰减）、
 ## 战鼓（音高下滑 + 鼓槌噪声）、埙（气声 + 颤音）。合成脚本见 `tools/audio/`。
 
@@ -23,11 +23,12 @@ const BUS_MASTER := "Master"
 const BUS_MUSIC := "Music"
 const BUS_SFX := "Sfx"
 
-## 两首背景音乐的资产路径。
+## 三首背景音乐的资产路径。
 ##
 ## 【为什么是 .ogg】Godot 4 可解码的压缩格式只有 OGG Vorbis / MP3。
-## 两首曲子都是 55 / 44 秒的循环曲，用 OGG 压到 0.3~0.5 MB（未压缩 WAV 会是 9 MB+）。
+## 三首曲子都是 25~55 秒的循环曲，用 OGG 压缩后体积很小（未压缩 WAV 会明显更大）。
 const MUSIC_MENU := "res://assets/music/menu.ogg"
+const MUSIC_FACTION := "res://assets/music/faction.ogg"
 const MUSIC_BATTLE := "res://assets/music/battle.ogg"
 
 ## ---------------- 音效 ----------------
@@ -43,6 +44,9 @@ const SFX_FILES := {
 	"hover": "ui_hover.wav",           # 鼠标悬停（很轻，只在少数界面用）
 	"card_place": "card_place.wav",    # 单位牌落到战场
 	"card_draw": "card_draw.wav",      # 抽牌
+	"power_up": "power_up.wav",        # 战力上涨
+	"power_down": "power_down.wav",    # 战力下降
+	"faction_select": "faction_select.wav", # 阵营确认
 	"tactic": "tactic.wav",            # 计策释放
 	"gong": "gong.wav",                # 高光时刻（将军 / 关键抉择）
 	"destroy": "destroy.wav",          # 单位被摧毁
@@ -59,6 +63,7 @@ const SFX_PLAYERS := 8
 
 ## 场景名（给 play_music 用，避免调用方到处写资源路径）
 const SCENE_MENU := "menu"
+const SCENE_FACTION := "faction"
 const SCENE_BATTLE := "battle"
 
 ## 淡入淡出时长（秒）。0 表示直接切。
@@ -172,6 +177,8 @@ func _path_for(scene: String) -> String:
 	match scene:
 		SCENE_MENU:
 			return MUSIC_MENU
+		SCENE_FACTION:
+			return MUSIC_FACTION
 		SCENE_BATTLE:
 			return MUSIC_BATTLE
 	return ""

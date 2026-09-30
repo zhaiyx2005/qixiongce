@@ -204,7 +204,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "arc_formation",
+    "ability_id": "han_crossbow",
     "faction_ability_id": ""
   },
   {
@@ -230,7 +230,7 @@
     "power": 4,
     "is_leader": false,
     "description": "",
-    "ability_id": "arc_formation",
+    "ability_id": "han_crossbow",
     "faction_ability_id": ""
   },
   {

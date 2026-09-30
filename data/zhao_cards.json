@@ -22,7 +22,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "cav_ironride",
+    "ability_id": "zhao_mobile",
     "faction_ability_id": ""
   },
   {
@@ -61,7 +61,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "cav_ironride",
+    "ability_id": "zhao_mobile",
     "faction_ability_id": ""
   },
   {
@@ -87,7 +87,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "cav_ironride",
+    "ability_id": "zhao_mobile",
     "faction_ability_id": ""
   },
   {
@@ -139,7 +139,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "cav_ironride",
+    "ability_id": "zhao_mobile",
     "faction_ability_id": ""
   },
   {
@@ -152,7 +152,7 @@
     "power": 3,
     "is_leader": false,
     "description": "",
-    "ability_id": "cav_ironride",
+    "ability_id": "zhao_mobile",
     "faction_ability_id": ""
   },
   {

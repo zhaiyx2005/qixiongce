@@ -5,11 +5,11 @@ class_name UiKit
 ## 所有界面模块（主菜单、牌库编辑、对局）都从这里取素材，保证风格统一。
 
 # ---------------- 配色 ----------------
-const COL_BG := Color("17140f")
-const COL_PANEL := Color("241f1a")
-const COL_PANEL_SOFT := Color("2b2520")
-const COL_PANEL_HI := Color("372f27")
-const COL_BORDER := Color(1, 1, 1, 0.07)
+const COL_BG := Color("10171c")
+const COL_PANEL := Color("1b252b")
+const COL_PANEL_SOFT := Color("243038")
+const COL_PANEL_HI := Color("303d43")
+const COL_BORDER := Color("526067")
 const COL_TEXT := Color("e9e0d1")
 const COL_TEXT_DIM := Color("9a9080")
 const COL_GOLD := Color("d8b26c")
@@ -81,6 +81,9 @@ static func panel_style(bg: Color, border_color := COL_BORDER, radius := 6, bord
 	style.border_color = border_color
 	style.set_border_width_all(border_width)
 	style.set_corner_radius_all(radius)
+	style.shadow_color = Color(0, 0, 0, 0.22)
+	style.shadow_size = 3
+	style.shadow_offset = Vector2(0, 2)
 	return style
 
 
@@ -111,11 +114,11 @@ static func style_button(button: Button, accent: Color, font_size := 16) -> void
 	button.add_theme_color_override("font_color", COL_TEXT)
 	button.add_theme_color_override("font_hover_color", Color.WHITE)
 	button.add_theme_color_override("font_disabled_color", Color(0.55, 0.52, 0.48, 1))
-	button.add_theme_stylebox_override("normal", panel_style(Color("332b24"), accent.darkened(0.35)))
-	button.add_theme_stylebox_override("hover", panel_style(Color("443a30"), accent))
+	button.add_theme_stylebox_override("normal", panel_style(COL_PANEL_SOFT, accent.darkened(0.35), 8))
+	button.add_theme_stylebox_override("hover", panel_style(COL_PANEL_HI, accent, 8, 2))
 	button.add_theme_stylebox_override("pressed", panel_style(Color("241f1a"), accent))
 	button.add_theme_stylebox_override("disabled", panel_style(Color("262220"), Color(1, 1, 1, 0.05)))
-	button.add_theme_stylebox_override("focus", panel_style(Color(0, 0, 0, 0), Color(0, 0, 0, 0)))
+	button.add_theme_stylebox_override("focus", panel_style(Color(0, 0, 0, 0), COL_SELECT, 8, 2))
 
 
 static func make_button(text: String, accent: Color, font_size := 16, min_size := Vector2(180, 44)) -> Button:

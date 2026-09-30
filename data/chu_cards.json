@@ -74,7 +74,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_formation",
+    "ability_id": "chu_depth",
     "faction_ability_id": ""
   },
   {
@@ -113,7 +113,7 @@
     "power": 4,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_formation",
+    "ability_id": "chu_depth",
     "faction_ability_id": ""
   },
   {
@@ -373,7 +373,7 @@
     "power": 2,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_formation",
+    "ability_id": "chu_depth",
     "faction_ability_id": ""
   },
   {
@@ -547,7 +547,7 @@
   },
   {
     "id": "chu_leader_01",
-    "name": "楚庄王",
+    "name": "楚悼王",
     "faction": "chu",
     "card_type": "leader",
     "unit_type": "",

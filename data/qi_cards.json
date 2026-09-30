@@ -9,7 +9,7 @@
     "power": 6,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_valor",
+    "ability_id": "qi_combined",
     "faction_ability_id": ""
   },
   {
@@ -165,7 +165,7 @@
     "power": 3,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_valor",
+    "ability_id": "qi_combined",
     "faction_ability_id": ""
   },
   {
@@ -360,7 +360,7 @@
     "power": 3,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_valor",
+    "ability_id": "qi_combined",
     "faction_ability_id": ""
   },
   {
@@ -417,7 +417,7 @@
   },
   {
     "id": "qi_hero_03",
-    "name": "管仲",
+    "name": "邹忌",
     "faction": "qi",
     "card_type": "unit",
     "unit_type": "hero",
@@ -547,7 +547,7 @@
   },
   {
     "id": "qi_leader_01",
-    "name": "齐桓公",
+    "name": "齐桓公田午",
     "faction": "qi",
     "card_type": "leader",
     "unit_type": "",

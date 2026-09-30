@@ -120,23 +120,39 @@ func refresh(cards: Array[CardData], power: int, powers: Array = []) -> void:
 	_power_label.text = str(power)
 	_power_label.add_theme_color_override("font_color",
 		UiKit.COL_GOLD if power > 0 else Color(1, 1, 1, 0.3))
+	# 保留实例，动态结阵、受伤与连续刷新不会重置飘字和震动。
+	var existing := {}
+	var incoming := {}
+	for card in cards:
+		incoming[_card_key(card)] = true
 	for child in _cards_box.get_children():
-		_cards_box.remove_child(child)
-		child.queue_free()
+		if incoming.has(_card_key(child.data)):
+			existing[_card_key(child.data)] = child
+		else:
+			_cards_box.remove_child(child)
+			child.queue_free()
 	for i in range(cards.size()):
 		var card := cards[i]
-		var view := CardView.new()
-		view.setup(card, CardView.Style.BOARD)
-		view.set_interaction(false, false, true)
-		view.card_right_clicked.connect(_on_board_card_right_clicked)
+		var view: CardView = existing.get(_card_key(card))
+		if view == null:
+			view = CardView.new()
+			view.setup(card, CardView.Style.BOARD)
+			view.set_interaction(false, false, true)
+			view.card_right_clicked.connect(_on_board_card_right_clicked)
+			_cards_box.add_child(view)
+		view.data = card
+		_cards_box.move_child(view, i)
 		if i < powers.size():
 			view.set_live_power(int(powers[i]))
 		else:
 			view.set_live_power(int(view.data.power))
-		_cards_box.add_child(view)
 	_has_cards = not cards.is_empty()
 	_update_hint()
 	reset_drop_state()
+
+
+func _card_key(card: CardData) -> String:
+	return card.instance_key if not card.instance_key.is_empty() else str(card.get_instance_id())
 
 
 func _on_board_card_right_clicked(card: CardData, _view: CardView) -> void:

@@ -10,8 +10,8 @@
 
 调式：D 宫五声音阶（宫 D / 商 E / 角 #F / 徵 A / 羽 B），战国风格的核心。
 
-输出：assets/music/menu.ogg（主菜单·庄重悠远） battle.ogg（对局·紧张肃杀）
-两者都是**整数小节**长度，末尾 25ms 淡出 + 开头 25ms 淡入，循环时听不出接缝。
+输出：assets/music/menu.ogg（主菜单·庄重悠远）、faction.ogg（阵营选择·肃静择国）、
+battle.ogg（对局·紧张肃杀）。三者都是**整数小节**长度，末尾 25ms 淡出 + 开头 25ms 淡入，循环时听不出接缝。
 """
 import os
 import sys
@@ -243,7 +243,36 @@ def build_menu() -> np.ndarray:
     return tr.master(peak=0.90)
 
 
-# ---------------- 曲目二：对局（紧张肃杀） ----------------
+# ---------------- 曲目二：阵营选择（肃静择国） ----------------
+# 76 BPM，4/4，共 8 小节 ≈ 25.26 秒
+
+def build_faction() -> np.ndarray:
+    bpm = 76.0
+    beat = 60.0 / bpm
+    bar = 4.0 * beat
+    bars = 8
+    total = bar * bars
+    tr = Track(total)
+
+    # 以 D2 持续低音托住画面，保持与主菜单和战斗曲相同的调式根音。
+    tr.add(drone(f_of("D2"), total, 0.13), 0.0)
+    # 每两小节一声编钟，给“择国”操作留下明确的呼吸点。
+    for b, nm in [(0, "D4"), (2, "A4"), (4, "F#4"), (6, "D4")]:
+        tr.add_stereo(bell(f_of(nm), 3.2, 0.30), b * bar, amp=1.0, width_ms=14.0)
+
+    # 短句古筝 + 稀疏埙声，气质安静但仍属于同一套战国音色。
+    motif = ["D4", "F#4", "A4", "B4", "A4", "F#4", "E4", "D4"]
+    for i, nm in enumerate(motif):
+        at = (i * 0.75) * beat
+        tr.add(pluck(f_of(nm), 1.4, 0.20), at, pan=-0.08)
+        if i % 2 == 1:
+            tr.add(flute(f_of(nm), 1.6 * beat, 0.08), at + 0.25 * beat, pan=0.18)
+
+    tr.reverb(mix=0.30)
+    return tr.master(peak=0.86)
+
+
+# ---------------- 曲目三：对局（紧张肃杀） ----------------
 # 108 BPM，4/4，每小节 2.22222 秒，共 20 小节 ≈ 44.44 秒
 
 def build_battle() -> np.ndarray:
@@ -303,6 +332,7 @@ def build_battle() -> np.ndarray:
 def main() -> int:
     print("合成背景音乐 -> %s" % OUT_DIR)
     write_ogg(os.path.join(OUT_DIR, "menu.ogg"), build_menu())
+    write_ogg(os.path.join(OUT_DIR, "faction.ogg"), build_faction())
     write_ogg(os.path.join(OUT_DIR, "battle.ogg"), build_battle())
     print("完成。")
     return 0

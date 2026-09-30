@@ -54,6 +54,27 @@ static func choose_card(state: GameState, player_index: int) -> CardData:
 
 # ---------------- 单位评估 ----------------
 
+## 只模拟站位的动态收益，不执行技能、不消耗随机数、不留下永久状态。
+static func choose_row(state: GameState, pi: int, card: CardData) -> String:
+	var owner := state.players[pi]
+	var best_row := card.row
+	var best_gain := -99999
+	var before := owner.total_power()
+	var rows := card.legal_rows()
+	rows.erase(card.row)
+	rows.push_front(card.row)
+	for row in rows:
+		var cards := owner.row_cards(row)
+		cards.append(card)
+		var gain := owner.total_power() - before
+		if not card.is_hero():
+			gain += int(owner.row_aura.get(row, 0))
+		cards.pop_back()
+		if gain > best_gain:
+			best_gain = gain
+			best_row = row
+	return best_row
+
 ## 手上单位牌的预期战力 = 卡面战力 + 落场行光环。
 ## 已在场上的卡走 effective_power（含永久增益与动态能力）。
 static func _effective(state: GameState, pi: int, card: CardData) -> int:

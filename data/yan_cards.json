@@ -74,7 +74,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_formation",
+    "ability_id": "yan_frontier",
     "faction_ability_id": ""
   },
   {
@@ -113,7 +113,7 @@
     "power": 4,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_formation",
+    "ability_id": "yan_frontier",
     "faction_ability_id": ""
   },
   {
@@ -373,7 +373,7 @@
     "power": 2,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_formation",
+    "ability_id": "yan_frontier",
     "faction_ability_id": ""
   },
   {

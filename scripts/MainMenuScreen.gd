@@ -18,8 +18,7 @@ func _ready() -> void:
 
 
 func _build() -> void:
-	var bg := ColorRect.new()
-	bg.color = UiKit.COL_BG
+	var bg := InkBackdrop.new()
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
@@ -37,7 +36,7 @@ func _build() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
 
-	var subtitle := UiKit.make_label("战国卡牌对战 · Demo · 三局两胜", 16, UiKit.COL_TEXT_DIM)
+	var subtitle := UiKit.make_label("七国争衡 · 运筹帷幄 · 三局两胜", 16, UiKit.COL_TEXT_DIM)
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(subtitle)
 
@@ -51,7 +50,7 @@ func _build() -> void:
 
 	box.add_child(UiKit.spacer(20))
 
-	var hint := UiKit.make_label("开始游戏 → 选择秦 / 赵 → 换牌 → 对局　|　联机对战 → 创建 / 加入房间", 13, Color(1, 1, 1, 0.28))
+	var hint := UiKit.make_label("选择七国阵营 · 构筑专属军阵 · 以谋略定天下", 13, UiKit.COL_TEXT_DIM)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(hint)
 

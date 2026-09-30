@@ -49,6 +49,9 @@ var _games_with_tactic := 0
 var _total_games := 0
 var _stuck_games := 0
 var _wrong_faction_games := 0
+var _deck_db := CardDB.new()
+var _archetypes := false
+var _seed_offset := 0
 
 
 func _init() -> void:
@@ -72,6 +75,9 @@ func _ok(cond: bool, what: String) -> void:
 
 func _run() -> void:
 	_watchdog()
+	_archetypes = OS.get_cmdline_user_args().has("--archetypes")
+	_seed_offset = 700000 if OS.get_cmdline_user_args().has("--holdout") else 0
+	print("卡组：%s；独立种子偏移：%d" % ["推荐流派交叉" if _archetypes else "预设", _seed_offset])
 	var pair_count: int = CardData.FACTIONS.size() * (CardData.FACTIONS.size() - 1)
 	print("\n===== 七国 AI 对局体检（每对 %d 局，共 %d 局） =====" % [
 		GAMES_PER_PAIR, pair_count * GAMES_PER_PAIR])
@@ -84,7 +90,7 @@ func _run() -> void:
 				continue
 			pairs += 1
 			for k in range(GAMES_PER_PAIR):
-				_play_one(a, b, 90000 + pairs * 1000 + k)
+				_play_one(a, b, 90000 + pairs * 1000 + k + _seed_offset)
 
 	var elapsed := (Time.get_ticks_msec() - t0) / 1000.0
 	print("\n  耗时            : %.1f 秒" % elapsed)
@@ -143,7 +149,12 @@ func _run() -> void:
 func _play_one(a: String, b: String, seed_v: int) -> void:
 	var gs: GameState = load("res://scripts/GameState.gd").new()
 	# 显式指定双方阵营（p_ai_faction = b），保证跑的就是 a vs b 这一组对阵
-	gs.start_match(a, null, null, seed_v, b)
+	var deck_a: DeckList = null
+	var deck_b: DeckList = null
+	if _archetypes:
+		deck_a = Archetypes.build(a, seed_v % 2, _deck_db)
+		deck_b = Archetypes.build(b, (seed_v / 2) % 2, _deck_db)
+	gs.start_match(a, deck_a, deck_b, seed_v, b)
 
 	if gs.players[0].faction != a or gs.players[1].faction != b:
 		_wrong_faction_games += 1
@@ -173,7 +184,7 @@ func _play_one(a: String, b: String, seed_v: int) -> void:
 					else:
 						gs.execute_command(Command.pass_turn(p))
 				else:
-					if not gs.execute_command(Command.play_card(p, card.id, card.row, -1)).ok:
+					if not gs.execute_command(Command.play_card(p, card.id, AIOpponent.choose_row(gs, p, card), -1)).ok:
 						gs.execute_command(Command.pass_turn(p))
 			GameState.Phase.ROUND_END:
 				gs.execute_command(Command.advance_round())

@@ -55,6 +55,7 @@ var selected := false
 var playable := true
 ## 场上卡牌显示实时战力（含增益）；为 -1 时用卡面战力
 var live_power := -1
+var _power_initialized := false
 
 var _panel: PanelContainer
 var _style_box: StyleBoxFlat
@@ -63,6 +64,8 @@ var _row_label: Label
 var _power_label: Label
 var _badge: Label
 var _hovering := false
+var _shake: Tween
+var _float_lane := 0
 
 
 static func row_display_name(row: String) -> String:
@@ -116,12 +119,19 @@ func setup(card: CardData, p_style: int = Style.BOARD) -> void:
 	custom_minimum_size = SIZES[style]
 	tooltip_text = describe(card)
 	_build()
+	resized.connect(_fit_panel)
 	_apply_style()
+
+
+func _fit_panel() -> void:
+	_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 
 ## 更新实时战力显示（场上卡牌用）。
 func set_live_power(value: int) -> void:
+	var previous := live_power if _power_initialized else value
 	live_power = value
+	_power_initialized = true
 	if _power_label != null and data != null and data.card_type == CardData.TYPE_UNIT:
 		_power_label.text = str(value)
 		var diff := value - data.power
@@ -133,6 +143,35 @@ func set_live_power(value: int) -> void:
 			_power_label.add_theme_color_override("font_color", UiKit.COL_DROP_NO)
 		else:
 			_power_label.add_theme_color_override("font_color", COL_GOLD)
+		if previous != value and is_inside_tree():
+			_show_power_change(previous, value)
+
+
+func _show_power_change(previous: int, value: int) -> void:
+	var delta := value - previous
+	var tint := UiKit.COL_DROP_OK if delta > 0 else UiKit.COL_DROP_NO
+	# 只震动内部面板，不扰动容器排版及悬停缩放。
+	if _shake != null and _shake.is_valid():
+		_shake.kill()
+	_panel.position = Vector2.ZERO
+	_shake = create_tween()
+	for offset in [4.0, -4.0, 3.0, -2.0, 0.0]:
+		_shake.tween_property(_panel, "position:x", offset, 0.045)
+	var floating := UiKit.make_label("%+d" % delta, 22, tint)
+	floating.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	floating.add_theme_color_override("font_outline_color", Color("10151e"))
+	floating.add_theme_constant_override("outline_size", 6)
+	floating.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	floating.size = Vector2(72, 32)
+	floating.position = Vector2((size.x - 72) * 0.5, 8 - (_float_lane % 3) * 18)
+	floating.z_index = 40
+	_float_lane += 1
+	add_child(floating)
+	var motion := floating.create_tween()
+	motion.tween_property(floating, "position:y", floating.position.y - 20, 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	motion.tween_interval(1.35)
+	motion.tween_property(floating, "modulate:a", 0.0, 0.5)
+	motion.tween_callback(floating.queue_free)
 
 
 ## 设置交互能力（点击 / 拖拽 / 悬停放大）
@@ -178,6 +217,10 @@ func _build() -> void:
 	_style_box = UiKit.panel_style(FACTION_BG.get(data.faction, SHARED_BG), Color("000000"), 5)
 	_panel.add_theme_stylebox_override("panel", _style_box)
 	add_child(_panel)
+	var decoration := CardDecoration.new()
+	decoration.kind = data.category()
+	decoration.accent = UiKit.faction_color(data.faction).lightened(0.2)
+	_panel.add_child(decoration)
 
 	var inner := MarginContainer.new()
 	inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -189,6 +232,11 @@ func _build() -> void:
 	box.add_theme_constant_override("separation", 1)
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	inner.add_child(box)
+	if style != Style.BOARD:
+		var seal := UiKit.make_label("◆ " + UiKit.faction_name(data.faction) + " ◆", 11, UiKit.faction_color(data.faction).lightened(0.3))
+		seal.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		seal.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		box.add_child(seal)
 
 	_name_label = UiKit.make_label(data.name, NAME_FONT[style], COL_TEXT)
 	_name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -197,6 +245,12 @@ func _build() -> void:
 	_name_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(_name_label)
+	if style != Style.BOARD:
+		var ability := UiKit.make_label(Abilities.ability_name(data.ability_id), 10, COL_DIM)
+		ability.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		ability.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		ability.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		box.add_child(ability)
 
 	var footer := HBoxContainer.new()
 	footer.add_theme_constant_override("separation", 2)
@@ -257,7 +311,8 @@ func _apply_style() -> void:
 	_style_box.bg_color = bg
 	_style_box.border_color = border
 	_style_box.set_border_width_all(width)
-	_style_box.set_corner_radius_all(5)
+	_style_box.set_corner_radius_all(7)
+	_style_box.border_width_top = width + 1
 
 	if clickable or draggable:
 		modulate = Color(1, 1, 1, 1) if playable else Color(0.6, 0.58, 0.56, 1)

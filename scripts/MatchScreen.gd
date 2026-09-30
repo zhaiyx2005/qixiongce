@@ -17,7 +17,7 @@ signal exit_to_menu
 ## 城墙只是装饰，从 14 收到 7（两个半场各省 7px）正好补平这 14px，
 ## 同时不动信息带/战场行/手牌区的尺寸，视觉损失最小。
 const WALL_HEIGHT := 7
-const HAND_AREA_WIDTH := 800
+const HAND_AREA_WIDTH := 1040
 const AI_THINK_TIME := 0.7
 ## 上半场（对手）暗红/暖褐，下半场（己方）暗蓝/冷褐，对比度压低不影响读牌
 const FIELD_TOP_COLOR := Color("31201b")
@@ -84,6 +84,8 @@ var _sfx_last_round: int = -1
 ## 联机客户端的对手（主机）出牌不经过本机 _dispatch()，只能靠数量变化补一个落牌音；
 ## 单机 / 主机不走这条 —— AI 与玩家一样走 _dispatch()，再补一次就是双声。
 var _sfx_last_opp_units: int = -1
+## 上一次双方总战力；只有单位数量不变时才播放增减音，避免落牌同时叠太多反馈。
+var _sfx_last_total_power: int = -1
 ## 音效去重：上一次看到的「双方场上单位总数」。
 ## 总数减少 = 有单位离场（摧毁 / 收回手牌），补一个崩解音。
 var _sfx_last_total_units: int = -1
@@ -315,6 +317,7 @@ func _start_match() -> void:
 	_sfx_last_round = -1
 	_sfx_last_total_units = -1
 	_sfx_last_opp_units = -1
+	_sfx_last_total_power = -1
 
 	if net_mode:
 		_setup_network_match()
@@ -777,7 +780,9 @@ func _sfx_track_state() -> void:
 		UiKit.sfx("round_start")
 
 	var total := 0
+	var total_power := 0
 	for i in range(2):
+		total_power += state.players[i].total_power()
 		for row in CardData.ROWS:
 			total += state.players[i].row_cards(row).size()
 	var opp_units := 0
@@ -786,12 +791,19 @@ func _sfx_track_state() -> void:
 
 	if not new_round and _sfx_last_total_units >= 0 and total < _sfx_last_total_units:
 		UiKit.sfx("destroy", 0.05, 0.95)
+	if not new_round and _sfx_last_total_power >= 0 and total == _sfx_last_total_units:
+		var power_delta := total_power - _sfx_last_total_power
+		if power_delta > 0:
+			UiKit.sfx("power_up", 0.04, 1.0)
+		elif power_delta < 0:
+			UiKit.sfx("power_down", 0.04, 0.96)
 	if _is_net_client() and _sfx_last_opp_units >= 0 and opp_units > _sfx_last_opp_units:
 		UiKit.sfx("card_place", 0.03, 0.9)
 
 	_sfx_last_round = round_now
 	_sfx_last_total_units = total
 	_sfx_last_opp_units = opp_units
+	_sfx_last_total_power = total_power
 
 
 func _refresh_corner_info() -> void:
@@ -1531,7 +1543,7 @@ func _on_ai_timeout() -> void:
 		# _schedule_ai() 不再启动定时器 → AI 永久停手，整局卡死。
 		result = _dispatch(Command.play_tactic(opp_index, card.id))
 	else:
-		result = _dispatch(Command.play_card(opp_index, card.id, card.row, -1))
+		result = _dispatch(Command.play_card(opp_index, card.id, AIOpponent.choose_row(state, opp_index, card), -1))
 	# 【兜底】万一指令仍被拒（AI 选到了落点非法的牌、或手牌已变），
 	# 必须让 AI 改判 Pass，否则回合永不推进 —— 表现同样是整局卡死。
 	if not result.ok:
@@ -1554,5 +1566,3 @@ func _clear_box(box: VBoxContainer) -> void:
 	for child in box.get_children():
 		box.remove_child(child)
 		child.queue_free()
-
-

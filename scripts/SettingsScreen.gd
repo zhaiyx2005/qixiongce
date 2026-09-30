@@ -27,7 +27,7 @@ const NET_UNSUPPORTED := [
 const VOLUME_ROWS := [
 	[AudioManager.BUS_MASTER, "主音量", "所有声音的总音量"],
 	[AudioManager.BUS_MUSIC, "背景音乐", "主菜单与对局音乐"],
-	[AudioManager.BUS_SFX, "音效", "按钮、出牌、计策、结算等反馈音"],
+	[AudioManager.BUS_SFX, "音效", "按钮、出牌、战力变化、计策、结算等反馈音"],
 ]
 
 ## 滑块 -> 百分比文字，便于回读

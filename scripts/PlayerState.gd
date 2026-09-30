@@ -264,7 +264,9 @@ func setup_deck(cards: Array[CardData]) -> void:
 	turns_on_board.clear()
 	veteran_done.clear()
 	clear_board()
-	for card in cards:
+	for i in range(cards.size()):
+		var card := cards[i]
+		card.instance_key = "%s:%d" % [faction, i]
 		if card.card_type == CardData.TYPE_LEADER or card.is_leader:
 			if leader == null:
 				leader = card
@@ -335,7 +337,15 @@ func serialize() -> Dictionary:
 	var returned_slots := _dict_to_slots(returned_before)
 	var turns_slots := _dict_to_slots(turns_on_board)
 	var veteran_slots := _dict_to_slots(veteran_done)
+	var identities := {}
+	for zone in [hand, deck, discard]:
+		for card in zone:
+			identities[slot_of(card)] = card.instance_key
+	for row in CardData.ROWS:
+		for card in row_cards(row):
+			identities[slot_of(card)] = card.instance_key
 	return {
+		"instance_keys": identities,
 		"faction": faction,
 		"display_name": display_name,
 		"is_human": is_human,
@@ -378,6 +388,11 @@ func deserialize(data: Dictionary, db: CardDB) -> void:
 
 	var leader_id := str(data.get("leader", ""))
 	leader = _make_card(leader_id, db) if not leader_id.is_empty() else null
+	var identities: Dictionary = data.get("instance_keys", {})
+	for slot in identities:
+		var card := card_at_slot(str(slot))
+		if card != null:
+			card.instance_key = str(identities[slot])
 
 	permanents = _slots_to_dict(data.get("permanents", {}))
 	returned_before = _slots_to_dict(data.get("returned_before", {}))

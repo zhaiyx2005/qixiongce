@@ -1,6 +1,9 @@
 extends Resource
 class_name CardData
 
+## 对局内身份；同名副本不同，联机快照之间保持稳定。卡库原型不设置。
+var instance_key: String = ""
+
 ## 《七雄策》卡牌数据定义（数据层，不含任何游戏逻辑）
 ##
 ## 四类卡：

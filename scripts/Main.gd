@@ -83,6 +83,7 @@ func _make_main_menu() -> Control:
 
 
 func _show_faction_select() -> void:
+	_play_music("faction")
 	var screen := FactionSelectScreen.new()
 	screen.setup(db)
 	_attach_net(screen)

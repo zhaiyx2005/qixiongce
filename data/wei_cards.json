@@ -48,7 +48,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_comrade",
+    "ability_id": "wei_drill",
     "faction_ability_id": ""
   },
   {
@@ -61,7 +61,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_comrade",
+    "ability_id": "wei_drill",
     "faction_ability_id": ""
   },
   {
@@ -308,7 +308,7 @@
     "power": 4,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_comrade",
+    "ability_id": "wei_drill",
     "faction_ability_id": ""
   },
   {
@@ -321,7 +321,7 @@
     "power": 3,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_comrade",
+    "ability_id": "wei_drill",
     "faction_ability_id": ""
   },
   {

@@ -86,6 +86,41 @@ def card_draw(amp: float = 0.5) -> np.ndarray:
     return amp * noise * env
 
 
+def power_up(amp: float = 0.38) -> np.ndarray:
+    """战力上涨：两枚短促编钟上行，亮但不抢过战场鼓点。"""
+    n = int(0.48 * SR)
+    out = np.zeros(n)
+    for nm, off, gain in [("D5", 0.0, 0.62), ("A5", 0.105, 0.46)]:
+        b = bell(f_of(nm), 0.38, gain)
+        s = int(off * SR)
+        out[s:s + len(b)] += b[:n - s]
+    return amp * out
+
+
+def power_down(amp: float = 0.34) -> np.ndarray:
+    """战力下降：低沉下行双音，尾部短，避免负面反馈堆叠刺耳。"""
+    n = int(0.52 * SR)
+    out = np.zeros(n)
+    for nm, off, gain in [("A4", 0.0, 0.58), ("D4", 0.13, 0.48)]:
+        b = bell(f_of(nm), 0.42, gain)
+        s = int(off * SR)
+        out[s:s + len(b)] += b[:n - s]
+    return amp * out
+
+
+def faction_select(amp: float = 0.62) -> np.ndarray:
+    """阵营确认：古筝拨弦后接一枚清亮编钟，表现择国落印。"""
+    n = int(0.86 * SR)
+    out = np.zeros(n)
+    for nm, off, gain in [("D4", 0.0, 0.42), ("F#4", 0.12, 0.30), ("A4", 0.24, 0.38)]:
+        p = pluck(f_of(nm), 0.42, gain)
+        s = int(off * SR)
+        out[s:s + len(p)] += p[:n - s]
+    b = bell(f_of("D5"), 0.8, 0.42)
+    out[int(0.32 * SR):int(0.32 * SR) + len(b)] += b[:n - int(0.32 * SR)]
+    return amp * out
+
+
 # ---------------- 金属：编钟、锣 ----------------
 
 def bell(f: float, dur: float, amp: float = 1.0) -> np.ndarray:
@@ -100,6 +135,15 @@ def bell(f: float, dur: float, amp: float = 1.0) -> np.ndarray:
         out += g * np.exp(-(1.1 + 0.75 * r) * t) * np.sin(2 * np.pi * f * r * t)
     out += 0.08 * np.exp(-t * 120.0) * _rng(int(f) % 9973).uniform(-1, 1, n)
     return amp * np.minimum(1.0, t * 600.0) * out
+
+
+def pluck(f: float, dur: float, amp: float = 1.0) -> np.ndarray:
+    """短拨弦，用于阵营确认，不与长篇背景音乐争夺频段。"""
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    out = np.sin(2 * np.pi * f * t) + 0.28 * np.sin(2 * np.pi * 2 * f * t)
+    out += 0.12 * np.sin(2 * np.pi * 3 * f * t)
+    return amp * np.minimum(1.0, t * 900.0) * np.exp(-t * 5.8) * out
 
 
 def tactic(amp: float = 0.62) -> np.ndarray:
@@ -222,6 +266,9 @@ EFFECTS = {
     "ui_hover": hover,
     "card_place": card_place,
     "card_draw": card_draw,
+    "power_up": power_up,
+    "power_down": power_down,
+    "faction_select": faction_select,
     "tactic": tactic,
     "gong": gong,
     "destroy": destroy,

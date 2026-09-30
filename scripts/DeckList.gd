@@ -196,6 +196,8 @@ static func load_for_faction(faction: String, db: CardDB) -> DeckList:
 ## 档位只做同战力破平，避免出现「同战力时两阵营运气性拿到不同强度能力」
 ## 造成的隐性优势（曾出现 102 : 100 导致秦胜率 61%）。
 const ABILITY_VALUE_TIER := {
+	"qin_merit": 3, "qi_combined": 3, "chu_depth": 3, "yan_frontier": 3,
+	"han_crossbow": 3, "zhao_mobile": 3, "wei_drill": 3,
 	"inf_comrade": 3, "inf_formation": 3, "arc_formation": 3, "cav_ironride": 3,
 	"inf_deathwish": 2, "inf_veteran": 2,
 	"inf_valor": 1, "arc_volley": 1, "arc_precise": 1, "arc_cover": 1,
@@ -264,7 +266,8 @@ static func preset_for(faction: String, db: CardDB) -> DeckList:
 		var used := int(t_used.get(card.name, 0))
 		if used >= DeckRules.MAX_COPIES_PER_NAME:
 			continue
-		var copies := mini(DeckRules.MAX_COPIES_PER_NAME - used, DeckRules.TACTICS - t_count)
+		# 预设展示六种不同计策，避免三份抽二牌主导国家强度。
+		var copies := 1
 		deck.set_card_count(card.id, copies)
 		t_used[card.name] = used + copies
 		t_count += copies

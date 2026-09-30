@@ -106,7 +106,7 @@ const DEFS := {
 	},
 	"hero_limu": {
 		"timing": TIMING_ON_PLAY, "name": "李牧",
-		"text": "己方总战力 < 对方时，己方全场单位 +1（英杰不吃）。",
+		"text": "守边备战：从牌库检索 1 张骑兵加入手牌；无骑兵则不触发。",
 	},
 	"hero_lianpo": {
 		"timing": TIMING_ON_PLAY, "name": "廉颇",
@@ -146,17 +146,9 @@ const DEFS := {
 		"text": "开局己方随机 1 张单位牌 +2。",
 	},
 	# ---------------- 计策 16（秦 8） ----------------
-	"tac_yuanjiao": {
-		"timing": TIMING_ON_PLAY, "name": "远交近攻",
-		"text": "对方战力最高的所有单位 -2。",
-	},
 	"tac_lianheng": {
 		"timing": TIMING_ON_PLAY, "name": "连横",
 		"text": "对方战力最高的行所有单位 -1，己方抽 1 张。",
-	},
-	"tac_jungong": {
-		"timing": TIMING_ON_PLAY, "name": "军功爵",
-		"text": "己方全场单位 +1。",
 	},
 	"tac_zhengguoqu": {
 		"timing": TIMING_ON_PLAY, "name": "郑国渠",
@@ -171,7 +163,7 @@ const DEFS := {
 		"text": "从牌库召唤 1 张战力最高的单位牌到守军行。",
 	},
 	"tac_fenzhou": {
-		"timing": TIMING_ON_PLAY, "name": "焚舟破釜",
+		"timing": TIMING_ON_PLAY, "name": "商鞅变法",
 		"text": "弃 1 张手牌，己方全场 +2。",
 	},
 	"tac_qincrossbow": {
@@ -186,14 +178,6 @@ const DEFS := {
 	"tac_wanbi": {
 		"timing": TIMING_ON_PLAY, "name": "完璧归赵",
 		"text": "收回己方最低战力单位，己方抽 1 张。",
-	},
-	"tac_jiangxiang": {
-		"timing": TIMING_ON_PLAY, "name": "将相和",
-		"text": "己方全场单位 +1。",
-	},
-	"tac_yuyu": {
-		"timing": TIMING_ON_PLAY, "name": "阏与之战",
-		"text": "若己方总战力落后，对方战力最高的行所有单位 -2。",
 	},
 	"tac_jianbi": {
 		"timing": TIMING_ON_PLAY, "name": "坚壁清野",
@@ -238,7 +222,7 @@ const DEFS := {
 		"text": "赛马：己方总战力落后时，己方骑兵 +2。",
 	},
 	"hero_qi_guanzhong": {
-		"timing": TIMING_ON_PLAY, "name": "管仲",
+		"timing": TIMING_ON_PLAY, "name": "邹忌",
 		"text": "通货积财：抽 1 张计策牌。",
 	},
 	"hero_qi_kuangzhang": {
@@ -303,7 +287,7 @@ const DEFS := {
 	},
 	"hero_wei_pangjuan": {
 		"timing": TIMING_ON_PLAY, "name": "庞涓",
-		"text": "围邯郸：本行落后时，对方同行所有单位 -2（受死志影响）。",
+		"text": "围邯郸：打出前本行落后时，对方同行战力最高的至多 3 个非英杰单位各 -2。",
 	},
 	"hero_wei_xinlingjun": {
 		"timing": TIMING_ON_PLAY, "name": "信陵君",
@@ -317,8 +301,8 @@ const DEFS := {
 	# ---------------- 领袖 15（齐楚燕韩魏 各 3） ----------------
 	# 齐
 	"leader_qi_huan": {
-		"timing": TIMING_MATCH_START, "name": "齐桓公",
-		"text": "尊王攘夷：开局从牌库检索 1 张单位牌加入手牌。",
+		"timing": TIMING_MATCH_START, "name": "齐桓公田午",
+		"text": "稷下聚士：开局从牌库检索 1 张单位牌加入手牌。",
 	},
 	"leader_qi_wei": {
 		"timing": TIMING_ROUND_START, "name": "齐威王",
@@ -330,7 +314,7 @@ const DEFS := {
 	},
 	# 楚
 	"leader_chu_zhuang": {
-		"timing": TIMING_MATCH_START, "name": "楚庄王",
+		"timing": TIMING_MATCH_START, "name": "楚悼王",
 		"text": "三年不鸣：开局从牌库检索 1 张单位牌加入手牌。",
 	},
 	"leader_chu_wei": {
@@ -383,12 +367,6 @@ const DEFS := {
 
 	# ---------------- 计策 40（齐楚燕韩魏 各 8） ----------------
 	# 齐
-	"tac_qi_zunwang": {
-		"timing": TIMING_ON_PLAY, "name": "尊王攘夷", "text": "己方全场单位 +1。",
-	},
-	"tac_qi_weiwei": {
-		"timing": TIMING_ON_PLAY, "name": "围魏救赵", "text": "对方战力最高的所有单位 -2。",
-	},
 	"tac_qi_huoniu": {
 		"timing": TIMING_ON_PLAY, "name": "火牛阵",
 		"text": "对方最低战力所有单位 -1；若己方守军行有单位，抽 1 张。",
@@ -412,12 +390,6 @@ const DEFS := {
 		"text": "对方战力最高的行所有单位 -1，己方抽 1 张。",
 	},
 	# 楚
-	"tac_chu_wending": {
-		"timing": TIMING_ON_PLAY, "name": "问鼎中原", "text": "对方战力最高的所有单位 -2。",
-	},
-	"tac_chu_bilu": {
-		"timing": TIMING_ON_PLAY, "name": "筚路蓝缕", "text": "己方全场单位 +1。",
-	},
 	"tac_chu_yunmeng": {
 		"timing": TIMING_ON_PLAY, "name": "云梦泽", "text": "己方抽 2 张。",
 	},
@@ -445,12 +417,6 @@ const DEFS := {
 	"tac_yan_huangjin": {
 		"timing": TIMING_ON_PLAY, "name": "黄金台", "text": "己方抽 2 张。",
 	},
-	"tac_yan_xiaqi": {
-		"timing": TIMING_ON_PLAY, "name": "下齐七十城", "text": "对方战力最高的所有单位 -2。",
-	},
-	"tac_yan_kuhan": {
-		"timing": TIMING_ON_PLAY, "name": "苦寒之地", "text": "己方全场单位 +1。",
-	},
 	"tac_yan_jingke": {
 		"timing": TIMING_ON_PLAY, "name": "荆轲刺秦", "text": "对方近战行所有单位 -2。",
 	},
@@ -471,12 +437,6 @@ const DEFS := {
 		"text": "对方最低战力所有单位 -1；若己方守军行有单位，抽 1 张。",
 	},
 	# 韩
-	"tac_han_jinnu": {
-		"timing": TIMING_ON_PLAY, "name": "劲弩之师", "text": "对方近战行所有单位 -2。",
-	},
-	"tac_han_yiyang": {
-		"timing": TIMING_ON_PLAY, "name": "宜阳铁冶", "text": "己方全场单位 +1。",
-	},
 	"tac_han_shuzhi": {
 		"timing": TIMING_ON_PLAY, "name": "术治之国", "text": "己方抽 2 张。",
 	},
@@ -501,12 +461,6 @@ const DEFS := {
 		"text": "清除己方守军行减益，己方守军行 +1。",
 	},
 	# 魏
-	"tac_wei_wuzu": {
-		"timing": TIMING_ON_PLAY, "name": "武卒选练", "text": "己方全场单位 +1。",
-	},
-	"tac_wei_wuzuzhi": {
-		"timing": TIMING_ON_PLAY, "name": "武卒之制", "text": "对方战力最高的所有单位 -2。",
-	},
 	"tac_wei_likui": {
 		"timing": TIMING_ON_PLAY, "name": "李悝变法", "text": "己方抽 2 张。",
 	},
@@ -535,6 +489,8 @@ const DEFS := {
 ## 动态能力：返回该卡的额外动态战力。
 ## owner 为持有方，row 为该卡当前所在行。
 static func dynamic_bonus(state: GameState, owner: PlayerState, card: CardData, row: String) -> int:
+	if FactionEffects.UNITS.has(card.ability_id):
+		return FactionEffects.dynamic_bonus(owner, card, row)
 	match card.ability_id:
 		"inf_comrade":
 			return _comrade_bonus(owner, card, row)
@@ -572,6 +528,9 @@ static func _comrade_bonus(owner: PlayerState, card: CardData, row: String) -> i
 
 
 static func def(ability_id: String) -> Dictionary:
+	var national := FactionEffects.definition(ability_id)
+	if not national.is_empty():
+		return national
 	return DEFS.get(ability_id, {})
 
 

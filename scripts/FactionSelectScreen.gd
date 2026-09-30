@@ -24,7 +24,7 @@ signal back
 
 ## 各国一句话特色（显示在阵营卡上）。四个字以内，保证 168px 宽的卡放得下。
 const FACTION_TAGLINES := {
-	CardData.FACTION_QIN: "强弩压阵",
+	CardData.FACTION_QIN: "军功进爵",
 	CardData.FACTION_QI: "技击富庶",
 	CardData.FACTION_CHU: "带甲百万",
 	CardData.FACTION_YAN: "苦寒坚守",
@@ -77,8 +77,7 @@ func _exit_tree() -> void:
 
 
 func _build() -> void:
-	var bg := ColorRect.new()
-	bg.color = UiKit.COL_BG
+	var bg := InkBackdrop.new()
 	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bg)
@@ -134,6 +133,7 @@ func _build() -> void:
 func _make_faction_card(faction: String) -> Button:
 	var accent := UiKit.faction_color(faction)
 	var button := Button.new()
+	button.tooltip_text = FactionEffects.FACTION_TIPS.get(faction, "")
 	button.custom_minimum_size = CARD_SIZE
 	UiKit.style_button(button, accent, 22)
 	button.pressed.connect(func(): _on_faction_card_pressed(faction))
@@ -156,6 +156,9 @@ func _make_faction_card(faction: String) -> Button:
 	var tag := UiKit.make_label(str(FACTION_TAGLINES.get(faction, "")), 12, UiKit.COL_TEXT_DIM)
 	tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(tag)
+	var playstyle := UiKit.make_label(str(FactionEffects.FACTION_ROLES.get(faction, "")), 11, accent.lightened(0.25))
+	playstyle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(playstyle)
 
 	return button
 
@@ -185,7 +188,7 @@ func _on_faction_card_pressed(faction: String) -> void:
 		_status.add_theme_color_override("font_color", UiKit.COL_LOSE)
 		return
 
-	UiKit.sfx("card_place", 0.04)
+	UiKit.sfx("faction_select", 0.025)
 	_picked = faction
 
 	if not net_mode:

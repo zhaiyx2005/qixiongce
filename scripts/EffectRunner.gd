@@ -4,7 +4,12 @@ class_name EffectRunner
 ## 能力效果执行器：把 ability_id 映射到具体的原子操作序列。
 ## 所有状态改动一律经 EffectResolver → GameState.apply_power_change，保证口径唯一。
 
-var state: GameState
+var _state_ref: WeakRef
+var state: GameState:
+	get:
+		return _state_ref.get_ref() as GameState
+	set(value):
+		_state_ref = weakref(value)
 var res: EffectResolver
 
 
@@ -141,7 +146,10 @@ func run_unit_on_play(owner_index: int, card: CardData, row: String,
 			if got2 != null:
 				return "%s：抽到计策牌「%s」" % [Abilities.ability_name(card.ability_id), got2.name]
 		# 总战力落后时己方全场 +1（英杰不吃）—— 李牧 / 庄蹻
-		"hero_limu", "hero_chu_zhuangqiao":
+		"hero_limu":
+			var reinforcement := res.fetch_to_hand(owner, func(c: CardData) -> bool: return c.unit_type == CardData.UNIT_CAVALRY)
+			return "李牧：检索骑兵「%s」" % reinforcement.name if reinforcement != null else "李牧：牌库无骑兵"
+		"hero_chu_zhuangqiao":
 			if owner.total_power() < foe.total_power():
 				var n4 := _buff_side_except_heroes(owner, 1, "逆风")
 				if n4 > 0:
@@ -157,7 +165,14 @@ func run_unit_on_play(owner_index: int, card: CardData, row: String,
 				return "%s：同行 %d 个单位恢复至卡面基础战力" % [
 					Abilities.ability_name(card.ability_id), n5]
 		# 本行落后时对方同行 -2 —— 赵奢 / 庞涓
-		"hero_zhaoshe", "hero_wei_pangjuan":
+		"hero_wei_pangjuan":
+			var hit_count := 0
+			if pre_row_power < pre_other_row_power:
+				for target in FactionEffects.select_units(foe, row, "", 3, true):
+					if state.apply_power_change(target, -2, "庞涓"):
+						hit_count += 1
+			return "庞涓：本行反击，%d 个单位 -2" % hit_count
+		"hero_zhaoshe":
 			if owner.row_power(row) < foe.row_power(row):
 				var hit5 := res.damage_row(foe, row, 2, "本行反击")
 				if not hit5.is_empty():
@@ -284,6 +299,8 @@ func apply_returned_bonus(owner_index: int, card: CardData) -> bool:
 ## 战报文案里**不含计策名**（`_do_play_tactic` 会先单独发一条「使用计策「X」」），
 ## 所以共享分支不会串名字。新增国家时只需把 id 追加到对应机制的 case 列表。
 func run_tactic(owner_index: int, card: CardData) -> String:
+	if FactionEffects.TACTICS.has(card.ability_id):
+		return FactionEffects.run_tactic(state, owner_index, card.ability_id)
 	var owner := state.players[owner_index]
 	var foe := state.players[1 - owner_index]
 	match card.ability_id:

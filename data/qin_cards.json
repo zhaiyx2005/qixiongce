@@ -9,7 +9,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_comrade",
+    "ability_id": "qin_merit",
     "faction_ability_id": ""
   },
   {
@@ -87,7 +87,7 @@
     "power": 5,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_comrade",
+    "ability_id": "qin_merit",
     "faction_ability_id": ""
   },
   {
@@ -334,7 +334,7 @@
     "power": 4,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_comrade",
+    "ability_id": "qin_merit",
     "faction_ability_id": ""
   },
   {
@@ -386,7 +386,7 @@
     "power": 3,
     "is_leader": false,
     "description": "",
-    "ability_id": "inf_comrade",
+    "ability_id": "qin_merit",
     "faction_ability_id": ""
   },
   {
@@ -521,7 +521,7 @@
   },
   {
     "id": "qin_tactic_07",
-    "name": "焚舟破釜",
+    "name": "商鞅变法",
     "faction": "qin",
     "card_type": "tactic",
     "unit_type": "",

@@ -8,7 +8,12 @@ class_name EffectResolver
 ##   2. 原子操作只通过 GameState 提供的接口改动状态，保证「动态战力」口径唯一。
 ##   3. 每个原子操作都返回受影响卡牌数组，便于战报文案与断言。
 
-var state: GameState
+var _state_ref: WeakRef
+var state: GameState:
+	get:
+		return _state_ref.get_ref() as GameState
+	set(value):
+		_state_ref = weakref(value)
 
 
 func _init(p_state: GameState) -> void:
