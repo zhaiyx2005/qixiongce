@@ -6,7 +6,7 @@
 
 不想配环境？直接下载打包好的 Windows 免安装版：
 
-- **Gitee Releases（国内推荐，秒开）**：https://gitee.com/zhaiyx2005/qixiongce/releases/tag/v1.0 （约 38 MB）
+- **Gitee Releases（国内推荐，秒开）**：https://gitee.com/zhaiyx2005/qixiongce/releases/tag/v1.1 （约 38 MB）
 - **GitHub Releases**：https://github.com/zhaiyx2005/qixiongce/releases/latest （约 38 MB）
 
 解压后双击 `七雄策.exe` 即可开始游戏，**请保持 `七雄策.pck` 与 exe 在同一目录**。
@@ -48,13 +48,14 @@ assets/           美术与音频素材
 
 ## 自动化验证
 
-项目包含 7 个无界面（headless）检查脚本，可在不启动图形界面的情况下验证核心逻辑是否被改动破坏：
+项目包含 8 个无界面（headless）检查脚本，可在不启动图形界面的情况下验证核心逻辑是否被改动破坏：
 
 | 脚本 | 用途 |
 | --- | --- |
 | `_smoke_boot.gd` | 冒烟启动，确认工程可正常加载 |
 | `_regress_rules.gd` | 规则回归，验证出牌与结算逻辑 |
 | `_regress_net.gd` | 网络同步回归，覆盖联机指令与状态一致性 |
+| `_check_faction_effects.gd` | 七国专属机制校验，覆盖各阵营能力触发条件 |
 | `_check_ai_balance.gd` | 数值平衡体检，批量自动对战统计各阵营胜率 |
 | `_check_archetypes.gd` | 流派配置校验 |
 | `_check_layout.gd` | 界面布局校验 |
@@ -65,6 +66,21 @@ assets/           美术与音频素材
 ```bash
 godot --headless --script res://scripts/_check_ai_balance.gd
 ```
+
+## 更新日志
+
+### v1.1 — 阵营专属机制 + 音画打磨
+
+- **七国专属机制**：新增 `FactionEffects.gd`，把原本通用的一套能力拆解为七国各自专属
+  （秦 军功成长 / 齐 步弩协同 / 楚 多路展开 / 燕 边塞固守 / 韩 劲弩集结 / 赵 骑兵策应 / 魏 武卒结阵），
+  7 个阵营的 315 张卡牌数据同步更新，阵营之间的打法差异被拉开
+- **界面表现**：新增 `CardDecoration`（卡牌装饰）、`InkBackdrop`（水墨背景）两个可复用组件
+- **音频**：新增阵营主题曲、势力选择音效、战力升/降音效
+- **自动化验证**：新增 `_check_faction_effects.gd`，把七国机制的触发条件纳入回归覆盖
+
+### v1.0 — 首个可玩版本
+
+三局两胜的三行战力比拼、7 阵营 315 张卡牌、14 套流派、人机对战与 P2P 联机。
 
 ## 运行
 
