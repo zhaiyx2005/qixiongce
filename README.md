@@ -7,7 +7,8 @@
 不想配环境？直接下载打包好的 Windows 免安装版：
 
 - **Gitee Releases（国内推荐，秒开）**：https://gitee.com/zhaiyx2005/qixiongce/releases/tag/v1.1 （约 38 MB）
-- **GitHub Releases**：https://github.com/zhaiyx2005/qixiongce/releases/latest （约 38 MB）
+- **GitHub**：https://github.com/zhaiyx2005/qixiongce —— 代码镜像。
+  （GitHub 的附件下载域名在国内网络下不可达，免安装包请从上方 Gitee 下载）
 
 解压后双击 `七雄策.exe` 即可开始游戏，**请保持 `七雄策.pck` 与 exe 在同一目录**。
 若被 Windows SmartScreen 拦截，右键 exe → 属性 → 勾选「解除锁定」后重试。
